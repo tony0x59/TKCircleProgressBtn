@@ -21,6 +21,7 @@
 		EA574EB2195024A000C7F6E9 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA574E94195024A000C7F6E9 /* UIKit.framework */; };
 		EA574EBA195024A000C7F6E9 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EA574EB8195024A000C7F6E9 /* InfoPlist.strings */; };
 		EA574EBC195024A000C7F6E9 /* CircleBtnDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = EA574EBB195024A000C7F6E9 /* CircleBtnDemoTests.m */; };
+		EA9C2A0F19517F9400224284 /* TKCircleProgressBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = EA9C2A0D19517F9400224284 /* TKCircleProgressBtn.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,8 @@
 		EA574EB7195024A000C7F6E9 /* CircleBtnDemoTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CircleBtnDemoTests-Info.plist"; sourceTree = "<group>"; };
 		EA574EB9195024A000C7F6E9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		EA574EBB195024A000C7F6E9 /* CircleBtnDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CircleBtnDemoTests.m; sourceTree = "<group>"; };
+		EA9C2A0D19517F9400224284 /* TKCircleProgressBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TKCircleProgressBtn.m; path = TKCircleProgressBtn/TKCircleProgressBtn.m; sourceTree = SOURCE_ROOT; };
+		EA9C2A0E19517F9400224284 /* TKCircleProgressBtn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TKCircleProgressBtn.h; path = TKCircleProgressBtn/TKCircleProgressBtn.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +115,8 @@
 		EA574E96195024A000C7F6E9 /* CircleBtnDemo */ = {
 			isa = PBXGroup;
 			children = (
+				EA9C2A0E19517F9400224284 /* TKCircleProgressBtn.h */,
+				EA9C2A0D19517F9400224284 /* TKCircleProgressBtn.m */,
 				EA574E9F195024A000C7F6E9 /* AppDelegate.h */,
 				EA574EA0195024A000C7F6E9 /* AppDelegate.m */,
 				EA574EA2195024A000C7F6E9 /* Main.storyboard */,
@@ -251,6 +256,7 @@
 			files = (
 				EA574EA7195024A000C7F6E9 /* ViewController.m in Sources */,
 				EA574EA1195024A000C7F6E9 /* AppDelegate.m in Sources */,
+				EA9C2A0F19517F9400224284 /* TKCircleProgressBtn.m in Sources */,
 				EA574E9D195024A000C7F6E9 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -379,6 +385,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CircleBtnDemo/CircleBtnDemo-Prefix.pch";
 				INFOPLIST_FILE = "CircleBtnDemo/CircleBtnDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -392,6 +399,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "CircleBtnDemo/CircleBtnDemo-Prefix.pch";
 				INFOPLIST_FILE = "CircleBtnDemo/CircleBtnDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -456,6 +464,7 @@
 				EA574EC1195024A000C7F6E9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		EA574EC2195024A000C7F6E9 /* Build configuration list for PBXNativeTarget "CircleBtnDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -464,6 +473,7 @@
 				EA574EC4195024A000C7F6E9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
