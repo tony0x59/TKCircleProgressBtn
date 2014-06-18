@@ -7,6 +7,14 @@
 //
 
 #import "TKCircleProgressBtn.h"
+#import <QuartzCore/QuartzCore.h>
+
+#define SYSTEM_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
+#define SYSTEM_VERSION_GREATER_THAN(v)              ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending)
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
+#define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+#define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
+
 
 
 #define DEGREES_TO_RADIANS(degrees)  ((M_PI * ((degrees) - 90))/ 180)
@@ -178,9 +186,9 @@
 - (void)showPlayingStyle
 {
     // 显示播放时间
-    [UIView animateKeyframesWithDuration:0.5 delay:0 options:0 animations:^{
+    [UIView animateWithDuration:0.5 animations:^{
         _playingLabel.alpha = 1.0;
-    } completion:nil];
+    }];
     
     // 显示小圆点
     thumbLayer.opacity = 1.0;
@@ -317,39 +325,35 @@
 - (void)shrinkAnimation
 {
     CGFloat duration = 0.15;
-    CGFloat delay = 0.0;
     UIView *view = self;
     
     view.transform = CGAffineTransformMakeScale(1, 1);
-    [UIView animateKeyframesWithDuration:duration delay:delay options:0 animations:^{
+    [UIView animateWithDuration:duration animations:^{
         view.transform = CGAffineTransformMakeScale(0.8, 0.8);
-    } completion:^(BOOL finished) {
     }];
 }
 
 - (void)popAnimation
 {
     UIView *view = self;
-    CGFloat duration = 0.5;
-    CGFloat delay = 0.0;
+    CALayer *layer = view.layer;
+    CGFloat duration = 0.6;
     
     view.transform = CGAffineTransformMakeScale(1, 1);
-    [UIView animateKeyframesWithDuration:duration/3 delay:delay options:0 animations:^{
-        // End
-        view.transform = CGAffineTransformMakeScale(1.2, 1.2);
-    } completion:^(BOOL finished) {
-        [UIView animateKeyframesWithDuration:duration/3 delay:0 options:0 animations:^{
-            // End
-            view.transform = CGAffineTransformMakeScale(0.9, 0.9);
-        } completion:^(BOOL finished) {
-            [UIView animateKeyframesWithDuration:duration/3 delay:0 options:0 animations:^{
-                // End
-                view.transform = CGAffineTransformMakeScale(1, 1);
-            } completion:^(BOOL finished) {
-                
-            }];
-        }];
-    }];
+
+    CAKeyframeAnimation *anim = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+    anim.values = @[ [NSValue valueWithCATransform3D:CATransform3DScale(layer.transform, 1.0, 1.0, 1.0)],
+                     [NSValue valueWithCATransform3D:CATransform3DScale(layer.transform, 1.2, 1.2, 1.0)],
+                     [NSValue valueWithCATransform3D:CATransform3DScale(layer.transform, 0.9, 0.9, 1.0)],
+                     [NSValue valueWithCATransform3D:CATransform3DScale(layer.transform, 1.0, 1.0, 1.0)] ];
+    anim.keyTimes = @[ @0.0f, @(duration/3.f*1), @(duration/3.f*2), @(duration/3.f*3) ];
+    [anim setTimingFunctions:@[ [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut],
+                                [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut],
+                                [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut] ]];
+    anim.fillMode = kCAFillModeForwards;
+//    anim.removedOnCompletion = YES;
+    anim.duration = duration;
+    [view.layer addAnimation:anim forKey:@"popAnimation"];
 }
 
 - (void)buttonPressed:(TKCircleProgressBtn*)sender
@@ -401,19 +405,17 @@
             [progressLayer addAnimation:progressRotate forKey:@"progressRotate"];
             
         } else {
-            
-            [UIView animateKeyframesWithDuration:0.25 delay:0 options:0 animations:^{
+
+            [UIView animateWithDuration:0.25 animations:^{
                 self.alpha = 0.0;
             } completion:^(BOOL finished) {
-                
                 self.btnState = TKCircleProgressBtnStatePause;
-                
-                [UIView animateKeyframesWithDuration:0.25 delay:0 options:0 animations:^{
+                [UIView animateWithDuration:0.25 animations:^{
                     // 停止自动旋转动画
                     [thumbLayer removeAnimationForKey:@"thumbRotate"];
                     [progressLayer removeAnimationForKey:@"progressRotate"];
                     self.alpha = 1.0;
-                } completion:nil];
+                }];
             }];
         }
     }
