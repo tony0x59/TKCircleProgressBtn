@@ -22,7 +22,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-    self.progressBtn = [[TKCircleProgressBtn alloc] initWithFrame:CGRectMake(100, 100, 60, 60)];
+    self.progressBtn = [[TKCircleProgressBtn alloc] initWithFrame:CGRectMake(100, 100, 50, 50)];
     [self.view addSubview:_progressBtn];
     
     UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(10, 300, 300, 30)];

@@ -74,14 +74,14 @@
     [self addSubview:borderView];
     
     _initialLabel = [[UILabel alloc] init];
-    _initialLabel.center = CGPointMake(CGRectGetWidth(borderView.bounds)/2 + 13,
-                                     CGRectGetHeight(borderView.bounds)/2);
+    _initialLabel.center = CGPointMake(CGRectGetWidth(borderView.bounds)/2 + 11,
+                                     CGRectGetHeight(borderView.bounds)/2 - 0.5);
     _initialLabel.bounds = borderView.bounds;
     _initialLabel.text = @"试听";
     _initialLabel.backgroundColor = [UIColor clearColor];
     _initialLabel.textColor = [UIColor magentaColor];
     _initialLabel.textAlignment = NSTextAlignmentCenter;
-    _initialLabel.font = [UIFont systemFontOfSize:15.0];
+    _initialLabel.font = [UIFont systemFontOfSize:14.0];
     _initialLabel.userInteractionEnabled = NO;
     [borderView addSubview:_initialLabel];
 }
@@ -105,7 +105,7 @@
     _playingLabel.center = center;
     _playingLabel.bounds = CGRectOffset(CGRectInset(innerRect, 5, 5), 0, 0);
     _playingLabel.backgroundColor = [UIColor clearColor];
-    _playingLabel.font = [UIFont fontWithName:@"Hiragino Kaku Gothic ProN" size:14.0] ;
+    _playingLabel.font = [UIFont fontWithName:@"Hiragino Kaku Gothic ProN" size:13.0] ;
     _playingLabel.textColor = [UIColor magentaColor];
     _playingLabel.textAlignment = NSTextAlignmentCenter;
     _playingLabel.text = @"4:35";
@@ -234,8 +234,8 @@
         [CATransaction begin];
         [CATransaction setAnimationDuration:0.4];
         circleLayer.transform = CATransform3DMakeScale(0.4, 0.4, 1.0);
-        circleLayer.position = CGPointMake(-2.0, 18.0);
-        circleLayer.lineWidth = 2.0;
+        circleLayer.position = CGPointMake(0.0, 15);
+        circleLayer.lineWidth = 1.5;
         circleLayer.strokeColor = [UIColor magentaColor].CGColor;
         [CATransaction commit];
     } else {
