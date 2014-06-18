@@ -7,8 +7,8 @@ Pod::Spec.new do |s|
      s.license      = 'MIT (LICENSE)'
      s.author       = { "Hanning Kong" => "hanningkong@gmail.com" }
      s.platform     = :ios, '6.0'
-      s.source       = { :git => "https://github.com/tony7day/TKCircleProgressBtn.git", :tag => "0.1.0" }
-       s.source_files  = 'TKCircleProgressBtn', 'TKCircleProgressBtn/*.{h,m}'
-     s.framework  = 'Foundation'
+     s.source       = { :git => "https://github.com/tony7day/TKCircleProgressBtn.git", :tag => "0.1.0" }
+     s.source_files  = 'TKCircleProgressBtn/*.{h,m}'
+     s.framework  = 'Foundation, QuartzCore'
      s.requires_arc = true
 end
