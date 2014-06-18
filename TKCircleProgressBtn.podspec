@@ -9,6 +9,6 @@ Pod::Spec.new do |s|
      s.platform     = :ios, '6.0'
      s.source       = { :git => "https://github.com/tony7day/TKCircleProgressBtn.git", :tag => "0.1.0" }
      s.source_files  = 'TKCircleProgressBtn/*.{h,m}'
-     s.framework  = 'Foundation, QuartzCore'
+     s.framework  = 'QuartzCore'
      s.requires_arc = true
 end
