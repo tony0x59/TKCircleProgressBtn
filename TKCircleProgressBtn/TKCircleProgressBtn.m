@@ -9,13 +9,6 @@
 #import "TKCircleProgressBtn.h"
 #import <QuartzCore/QuartzCore.h>
 
-#define SYSTEM_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
-#define SYSTEM_VERSION_GREATER_THAN(v)              ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending)
-#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
-#define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
-#define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
-
-
 
 #define DEGREES_TO_RADIANS(degrees)  ((M_PI * ((degrees) - 90))/ 180)
 
@@ -66,7 +59,7 @@
     
     borderView = [[UIView alloc] init];
     borderView.center = CGPointMake(frame.size.width/2, frame.size.height/2);
-    borderView.bounds = CGRectMake(0, 0, CGRectGetWidth(self.bounds)*1.3, CGRectGetHeight(self.bounds)*0.48);
+    borderView.bounds = CGRectMake(0, 0, CGRectGetWidth(self.bounds)*1.15, CGRectGetHeight(self.bounds)*0.44);
     borderView.layer.borderColor = [UIColor magentaColor].CGColor;
     borderView.layer.cornerRadius = 5.0;
     borderView.layer.borderWidth = 1.0;
@@ -74,8 +67,8 @@
     [self addSubview:borderView];
     
     _initialLabel = [[UILabel alloc] init];
-    _initialLabel.center = CGPointMake(CGRectGetWidth(borderView.bounds)/2 + 11,
-                                     CGRectGetHeight(borderView.bounds)/2 - 0.5);
+    _initialLabel.center = CGPointMake(CGRectGetWidth(borderView.bounds)/2 + 12,
+                                       CGRectGetHeight(borderView.bounds)/2 - 0.5);
     _initialLabel.bounds = borderView.bounds;
     _initialLabel.text = @"试听";
     _initialLabel.backgroundColor = [UIColor clearColor];
@@ -108,7 +101,7 @@
     _playingLabel.font = [UIFont fontWithName:@"Hiragino Kaku Gothic ProN" size:13.0] ;
     _playingLabel.textColor = [UIColor magentaColor];
     _playingLabel.textAlignment = NSTextAlignmentCenter;
-    _playingLabel.text = @"4:35";
+    _playingLabel.text = @"04:35";
     _playingLabel.alpha = 0.0;
     [circleLayer addSublayer:_playingLabel.layer];
     
@@ -233,8 +226,8 @@
         
         [CATransaction begin];
         [CATransaction setAnimationDuration:0.4];
-        circleLayer.transform = CATransform3DMakeScale(0.4, 0.4, 1.0);
-        circleLayer.position = CGPointMake(0.0, 15);
+        circleLayer.transform = CATransform3DMakeScale(0.38, 0.38, 1.0);
+        circleLayer.position = CGPointMake(3.0, 18.5);
         circleLayer.lineWidth = 1.5;
         circleLayer.strokeColor = [UIColor magentaColor].CGColor;
         [CATransaction commit];
