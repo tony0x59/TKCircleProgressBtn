@@ -26,6 +26,8 @@ typedef NS_ENUM(NSUInteger, TKCircleProgressBtnState) {
 @property (nonatomic, readonly) UILabel *initialLabel;
 @property (nonatomic, readonly) UILabel *playingLabel;
 
+@property (nonatomic, strong) UIColor *tintColor;
+
 @property (nonatomic, assign) CGPoint initialBtnOffset;
 
 @property (nonatomic, assign) BOOL    rotate;

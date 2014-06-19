@@ -40,6 +40,8 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
+        _tintColor = [UIColor magentaColor];
+        
         [self initSquareButtonLayer];
         
         [self initCircleLayer];
@@ -60,7 +62,7 @@
     borderView = [[UIView alloc] init];
     borderView.center = CGPointMake(frame.size.width/2, frame.size.height/2);
     borderView.bounds = CGRectMake(0, 0, CGRectGetWidth(self.bounds)*1.15, CGRectGetHeight(self.bounds)*0.44);
-    borderView.layer.borderColor = [UIColor magentaColor].CGColor;
+    borderView.layer.borderColor = _tintColor.CGColor;
     borderView.layer.cornerRadius = 5.0;
     borderView.layer.borderWidth = 1.0;
     borderView.userInteractionEnabled = NO;
@@ -72,7 +74,7 @@
     _initialLabel.bounds = borderView.bounds;
     _initialLabel.text = @"试听";
     _initialLabel.backgroundColor = [UIColor clearColor];
-    _initialLabel.textColor = [UIColor magentaColor];
+    _initialLabel.textColor = _tintColor;
     _initialLabel.textAlignment = NSTextAlignmentCenter;
     _initialLabel.font = [UIFont systemFontOfSize:14.0];
     _initialLabel.userInteractionEnabled = NO;
@@ -89,7 +91,7 @@
     
     circleLayer = [CAShapeLayer layer];
     circleLayer.path = [UIBezierPath bezierPathWithOvalInRect:innerRect].CGPath;
-    circleLayer.strokeColor = [[UIColor magentaColor] colorWithAlphaComponent:0.5].CGColor;
+    circleLayer.strokeColor = [_tintColor colorWithAlphaComponent:0.5].CGColor;
     circleLayer.fillColor = nil;
     circleLayer.lineWidth = 1.0;
     [self.layer addSublayer:circleLayer];
@@ -99,7 +101,7 @@
     _playingLabel.bounds = CGRectOffset(CGRectInset(innerRect, 5, 5), 0, 0);
     _playingLabel.backgroundColor = [UIColor clearColor];
     _playingLabel.font = [UIFont fontWithName:@"Hiragino Kaku Gothic ProN" size:13.0] ;
-    _playingLabel.textColor = [UIColor magentaColor];
+    _playingLabel.textColor = _tintColor;
     _playingLabel.textAlignment = NSTextAlignmentCenter;
     _playingLabel.text = @"04:35";
     _playingLabel.alpha = 0.0;
@@ -114,7 +116,7 @@
     [tranglePath addLineToPoint:CGPointMake(center.x - tlenth/4, center.y - tlenth/2)];
     
     trangleLayer = [CAShapeLayer layer];
-    trangleLayer.strokeColor = [UIColor magentaColor].CGColor;
+    trangleLayer.strokeColor = _tintColor.CGColor;
     trangleLayer.fillColor = nil;
     trangleLayer.lineWidth = 1.0;
     trangleLayer.path = tranglePath.CGPath;
@@ -128,7 +130,7 @@
     
     progressLayer = [CAShapeLayer layer];
     progressLayer.path = circlePath.CGPath;
-    progressLayer.strokeColor = [UIColor magentaColor].CGColor;
+    progressLayer.strokeColor = _tintColor.CGColor;
     progressLayer.fillColor = nil;
     progressLayer.lineWidth = 1.5;
     progressLayer.strokeStart = 0.0;
@@ -140,7 +142,7 @@
     thumbLayer.position = CGPointMake(center.x, margin);
     thumbLayer.bounds = CGRectMake(0, 0, thumbRadius*2, thumbRadius*2);
     thumbLayer.cornerRadius = thumbRadius;
-    thumbLayer.backgroundColor = [UIColor magentaColor].CGColor;
+    thumbLayer.backgroundColor = _tintColor.CGColor;
     thumbLayer.opacity = 0.0;
     [circleLayer addSublayer:thumbLayer];
 }
@@ -151,9 +153,7 @@
     borderView.center = CGPointMake(CGRectGetWidth(self.bounds)/2 + _initialBtnOffset.x,
                                     CGRectGetHeight(self.bounds)/2 + _initialBtnOffset.y);
     if (self.isShinkCircle) {
-        /* yeah, it's magical number.. sorry~ */
-        circleLayer.position = CGPointMake(3.0 + _initialBtnOffset.x,
-                                           18.5 + _initialBtnOffset.y);
+        [self updateCircleLayerLayout];
     }
 }
 
@@ -231,7 +231,12 @@
 - (void)setIsShinkCircle:(BOOL)isShinkCircle
 {
     _isShinkCircle = isShinkCircle;
-    if (isShinkCircle) {
+    [self updateCircleLayerLayout];
+}
+
+- (void)updateCircleLayerLayout
+{
+    if (_isShinkCircle) {
         [UIView animateWithDuration:0.2 animations:^{
             borderView.alpha = 1.0;
         }];
@@ -243,7 +248,7 @@
         circleLayer.position = CGPointMake(3.0 + _initialBtnOffset.x,
                                            18.5 + _initialBtnOffset.y);
         circleLayer.lineWidth = 1.5;
-        circleLayer.strokeColor = [UIColor magentaColor].CGColor;
+        circleLayer.strokeColor = _tintColor.CGColor;
         [CATransaction commit];
     } else {
         [UIView animateWithDuration:0.2 animations:^{
@@ -255,7 +260,7 @@
         circleLayer.transform = CATransform3DMakeScale(1.0, 1.0, 1.0);
         circleLayer.position = CGPointMake(0.0, 0.0);
         circleLayer.lineWidth = 1.0;
-        circleLayer.strokeColor = [[UIColor magentaColor] colorWithAlphaComponent:0.5].CGColor;
+        circleLayer.strokeColor = [_tintColor colorWithAlphaComponent:0.5].CGColor;
         [CATransaction commit];
     }
 }
@@ -426,6 +431,18 @@
             }];
         }
     }
+}
+
+- (void)setTintColor:(UIColor *)tintColor
+{
+    _tintColor = tintColor;
+    borderView.layer.borderColor = _tintColor.CGColor;
+    _initialLabel.textColor = _tintColor;
+    _playingLabel.textColor = _tintColor;
+    trangleLayer.strokeColor = _tintColor.CGColor;
+    progressLayer.strokeColor = _tintColor.CGColor;
+    thumbLayer.backgroundColor = _tintColor.CGColor;
+    [self updateCircleLayerLayout];
 }
 
 @end
