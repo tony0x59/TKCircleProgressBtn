@@ -73,7 +73,7 @@
 
 - (void)switchChanged:(UISwitch*)sender
 {
-    _progressBtn.rotate = sender.on;
+    _progressBtn.btnState = TKCircleProgressBtnStateBuffering;
 }
 
 - (void)switch2Changed:(UISwitch*)sender

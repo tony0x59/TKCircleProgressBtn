@@ -16,6 +16,7 @@
 @interface TKCircleProgressBtn ()
 
 @property (nonatomic, assign) BOOL isShinkCircle;
+@property (nonatomic, assign) BOOL isBuffering;
 
 @end
 
@@ -23,11 +24,16 @@
 @implementation TKCircleProgressBtn {
     UIBezierPath *circlePath;
     UIBezierPath *tranglePath;
+    UIBezierPath *bufferingPath;
     
-    CAShapeLayer *circleLayer;
+    CALayer *mainLayer;
     CAShapeLayer *progressLayer;
     CALayer      *thumbLayer;
     CAShapeLayer *trangleLayer;
+    
+    CAShapeLayer *leftArrow;
+    CAShapeLayer *rightArrow;
+    CAShapeLayer *circleLayer;
     
     UIView *borderView;
     
@@ -44,7 +50,9 @@
         
         [self initSquareButtonLayer];
         
-        [self initCircleLayer];
+        [self initCircleButtonLayer];
+        
+        [self initArrowLayer];
         
         self.btnState = TKCircleProgressBtnStateInitial;
         
@@ -81,7 +89,7 @@
     [borderView addSubview:_initialLabel];
 }
 
-- (void)initCircleLayer
+- (void)initCircleButtonLayer
 {
     CGRect frame = self.frame;
     
@@ -89,12 +97,19 @@
     innerRect = CGRectInset(self.bounds, margin, margin);
     CGPoint center = CGPointMake(frame.size.width/2, frame.size.height/2);
     
+    mainLayer = [CALayer layer];
+    mainLayer.bounds = self.bounds;
+    mainLayer.position = center;
+    [self.layer addSublayer:mainLayer];
+    
     circleLayer = [CAShapeLayer layer];
+    circleLayer.bounds = self.bounds;
+    circleLayer.position = center;
     circleLayer.path = [UIBezierPath bezierPathWithOvalInRect:innerRect].CGPath;
     circleLayer.strokeColor = [_tintColor colorWithAlphaComponent:0.5].CGColor;
     circleLayer.fillColor = nil;
     circleLayer.lineWidth = 1.0;
-    [self.layer addSublayer:circleLayer];
+    [mainLayer addSublayer:circleLayer];
     
     _playingLabel = [[UILabel alloc] init];
     _playingLabel.center = center;
@@ -105,7 +120,7 @@
     _playingLabel.textAlignment = NSTextAlignmentCenter;
     _playingLabel.text = @"04:35";
     _playingLabel.alpha = 0.0;
-    [circleLayer addSublayer:_playingLabel.layer];
+    [mainLayer addSublayer:_playingLabel.layer];
     
     CGFloat tlenth = innerRect.size.width / 2.5;
     tranglePath = [UIBezierPath bezierPath];
@@ -113,14 +128,14 @@
     [tranglePath addLineToPoint:CGPointMake(center.x - tlenth/4, center.y + tlenth/2)];
     [tranglePath addLineToPoint:CGPointMake(center.x + sqrtf(powf(tlenth/4, 2) + powf(tlenth/2, 2)),
                                             center.y)];
-    [tranglePath addLineToPoint:CGPointMake(center.x - tlenth/4, center.y - tlenth/2)];
+    [tranglePath closePath];
     
     trangleLayer = [CAShapeLayer layer];
     trangleLayer.strokeColor = _tintColor.CGColor;
     trangleLayer.fillColor = nil;
     trangleLayer.lineWidth = 1.0;
     trangleLayer.path = tranglePath.CGPath;
-    [circleLayer addSublayer:trangleLayer];
+    [mainLayer addSublayer:trangleLayer];
     
     circlePath = [UIBezierPath bezierPathWithArcCenter:center
                                                 radius:(innerRect.size.width)/2
@@ -135,7 +150,7 @@
     progressLayer.lineWidth = 1.5;
     progressLayer.strokeStart = 0.0;
     progressLayer.strokeEnd = 0.0;
-    [circleLayer addSublayer:progressLayer];
+    [mainLayer addSublayer:progressLayer];
     
     thumbRadius = frame.size.width * 0.03;
     thumbLayer = [CALayer layer];
@@ -144,7 +159,48 @@
     thumbLayer.cornerRadius = thumbRadius;
     thumbLayer.backgroundColor = _tintColor.CGColor;
     thumbLayer.opacity = 0.0;
-    [circleLayer addSublayer:thumbLayer];
+    [mainLayer addSublayer:thumbLayer];
+}
+
+- (void)initArrowLayer
+{
+    /* the arrow */
+    CGRect frame = self.frame;
+    CGFloat len = frame.size.width * 0.1 / 2;
+    CGPoint center = CGPointMake(frame.size.width/2, frame.size.height/2);
+    
+    UIBezierPath *path = [UIBezierPath bezierPath];
+
+    /* top arrow */
+    CGPoint tCenter = CGPointMake(center.x, margin);
+    [path moveToPoint:CGPointMake(tCenter.x - len, tCenter.y - len)];
+    [path addLineToPoint:CGPointMake(tCenter.x + len, tCenter.y)];
+    [path addLineToPoint:CGPointMake(tCenter.x - len, tCenter.y + len)];
+    
+    /* bottom arrow */
+    CGPoint bCenter = CGPointMake(center.x, center.y + innerRect.size.height/2);
+    [path moveToPoint:CGPointMake(bCenter.x + len, bCenter.y - len)];
+    [path addLineToPoint:CGPointMake(bCenter.x - len, bCenter.y)];
+    [path addLineToPoint:CGPointMake(bCenter.x + len, bCenter.y + len)];
+    
+    /* left arc */
+    CGFloat marginAngle = 20;
+    [path moveToPoint:tCenter];
+    [path addArcWithCenter:center
+                    radius:innerRect.size.width/2
+                startAngle:DEGREES_TO_RADIANS(3)
+                  endAngle:DEGREES_TO_RADIANS(180 + marginAngle)
+                 clockwise:NO];
+    
+    /* right arc */
+    [path moveToPoint:bCenter];
+    [path addArcWithCenter:center
+                    radius:innerRect.size.width/2
+                startAngle:DEGREES_TO_RADIANS(180 + 3)
+                  endAngle:DEGREES_TO_RADIANS(marginAngle)
+                 clockwise:NO];
+    
+    bufferingPath = path;
 }
 
 - (void)setInitialBtnOffset:(CGPoint)initialBtnOffset
@@ -170,6 +226,12 @@
                 [self showPauseStyle];
             }
                 break;
+            case TKCircleProgressBtnStateBuffering:
+            {
+                [self setIsShinkCircle:NO];
+                [self showBufferingStyle:YES];
+            }
+                break;
             case TKCircleProgressBtnStatePlaying:
             {
                 [self setIsShinkCircle:NO];
@@ -190,33 +252,21 @@
 
 - (void)showPlayingStyle
 {
-    // 显示播放时间
     [UIView animateWithDuration:0.5 animations:^{
         _playingLabel.alpha = 1.0;
     }];
-    
-    // 显示小圆点
     thumbLayer.opacity = 1.0;
-    
-    // 显示播放进度
     progressLayer.opacity = 1.0;
-    
-    // 隐藏三角形
     trangleLayer.opacity = 0.0;
+    
+    [self showBufferingStyle:NO];
 }
 
 - (void)showPauseStyle
 {
-    // 隐藏播放时间
     _playingLabel.alpha = 0.0;
-    
-    // 隐藏小圆点
     thumbLayer.opacity = 0.0;
-    
-    // 隐藏播放进度
     progressLayer.opacity = 0.0;
-    
-    // 显示三角形
     trangleLayer.opacity = 1.0;
     
     // 三角形绘制动画
@@ -226,6 +276,36 @@
     anim.duration = 0.3;
     trangleLayer.strokeEnd = 1.0;
     [trangleLayer addAnimation:anim forKey:@"trangleAnimation"];
+    
+    [self showBufferingStyle:NO];
+}
+
+- (void)showBufferingStyle:(BOOL)isTrue
+{
+    if (isTrue == NO) {
+        circleLayer.path = circlePath.CGPath;
+        [circleLayer removeAnimationForKey:@"bufferingAnimation"];
+        return;
+    }
+    [UIView animateWithDuration:0.5 animations:^{
+        _playingLabel.alpha = 1.0;
+    }];
+    thumbLayer.opacity = 0.0;
+    progressLayer.opacity = 0.0;
+    trangleLayer.opacity = 0.0;
+    
+    circleLayer.path = bufferingPath.CGPath;
+    circleLayer.strokeColor = _tintColor.CGColor;
+    thumbLayer.opacity = 0.0;
+    
+    CABasicAnimation *animation;
+    animation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    animation.toValue = [NSNumber numberWithFloat: M_PI * 2.0];
+    animation.duration = 3.0;
+    animation.cumulative = YES;
+    animation.repeatCount = HUGE_VALF;
+    
+    [circleLayer addAnimation:animation forKey:@"bufferingAnimation"];
 }
 
 - (void)setIsShinkCircle:(BOOL)isShinkCircle
@@ -243,10 +323,14 @@
         
         [CATransaction begin];
         [CATransaction setAnimationDuration:0.4];
-        circleLayer.transform = CATransform3DMakeScale(0.38, 0.38, 1.0);
-        /* yeah, it's magical number.. sorry~ */
-        circleLayer.position = CGPointMake(3.0 + _initialBtnOffset.x,
-                                           18.5 + _initialBtnOffset.y);
+        
+        CGFloat radio = 0.38;
+        mainLayer.transform = CATransform3DMakeScale(radio, radio, 1.0);
+        
+        CGFloat centerX = margin/2 + CGRectGetWidth(mainLayer.bounds) * radio / 2;
+        CGFloat centerY = CGRectGetMidY(self.bounds);
+        mainLayer.position = CGPointMake(centerX + _initialBtnOffset.x,
+                                           centerY + _initialBtnOffset.y);
         circleLayer.lineWidth = 1.5;
         circleLayer.strokeColor = _tintColor.CGColor;
         [CATransaction commit];
@@ -257,8 +341,9 @@
         
         [CATransaction begin];
         [CATransaction setAnimationDuration:0.4];
-        circleLayer.transform = CATransform3DMakeScale(1.0, 1.0, 1.0);
-        circleLayer.position = CGPointMake(0.0, 0.0);
+        mainLayer.transform = CATransform3DMakeScale(1.0, 1.0, 1.0);
+        mainLayer.position = CGPointMake(CGRectGetMidX(self.bounds),
+                                           CGRectGetMidY(self.bounds));
         circleLayer.lineWidth = 1.0;
         circleLayer.strokeColor = [_tintColor colorWithAlphaComponent:0.5].CGColor;
         [CATransaction commit];
@@ -387,7 +472,6 @@
 
 - (void)reset
 {
-    [self popAnimation];
     self.btnState = TKCircleProgressBtnStateInitial;
 }
 

@@ -9,10 +9,11 @@
 #import <UIKit/UIKit.h>
 
 typedef NS_ENUM(NSUInteger, TKCircleProgressBtnState) {
-    TKCircleProgressBtnStateInitial = 1,
-    TKCircleProgressBtnStatePlaying = 2,
-    TKCircleProgressBtnStatePause   = 3,
-    TKCircleProgressBtnStateStop    = TKCircleProgressBtnStateInitial,
+    TKCircleProgressBtnStateInitial   = 1,
+    TKCircleProgressBtnStateBuffering = 2,
+    TKCircleProgressBtnStatePlaying   = 3,
+    TKCircleProgressBtnStatePause     = 4,
+    TKCircleProgressBtnStateStop      = TKCircleProgressBtnStateInitial,
 };
 
 @interface TKCircleProgressBtn : UIControl
