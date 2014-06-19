@@ -145,6 +145,18 @@
     [circleLayer addSublayer:thumbLayer];
 }
 
+- (void)setInitialBtnOffset:(CGPoint)initialBtnOffset
+{
+    _initialBtnOffset = initialBtnOffset;
+    borderView.center = CGPointMake(CGRectGetWidth(self.bounds)/2 + _initialBtnOffset.x,
+                                    CGRectGetHeight(self.bounds)/2 + _initialBtnOffset.y);
+    if (self.isShinkCircle) {
+        /* yeah, it's magical number.. sorry~ */
+        circleLayer.position = CGPointMake(3.0 + _initialBtnOffset.x,
+                                           18.5 + _initialBtnOffset.y);
+    }
+}
+
 #pragma mark - state
 
 - (void)setBtnState:(TKCircleProgressBtnState)btnState
@@ -227,7 +239,9 @@
         [CATransaction begin];
         [CATransaction setAnimationDuration:0.4];
         circleLayer.transform = CATransform3DMakeScale(0.38, 0.38, 1.0);
-        circleLayer.position = CGPointMake(3.0, 18.5);
+        /* yeah, it's magical number.. sorry~ */
+        circleLayer.position = CGPointMake(3.0 + _initialBtnOffset.x,
+                                           18.5 + _initialBtnOffset.y);
         circleLayer.lineWidth = 1.5;
         circleLayer.strokeColor = [UIColor magentaColor].CGColor;
         [CATransaction commit];
