@@ -76,13 +76,17 @@
     [self addSubview:borderView];
     
     _initialLabel = [[UILabel alloc] init];
-    _initialLabel.center = CGPointMake(CGRectGetWidth(borderView.bounds)/2 + 12,
-                                       CGRectGetHeight(borderView.bounds)/2 - 0.5);
-    _initialLabel.bounds = borderView.bounds;
+    _initialLabel.frame = CGRectMake(CGRectGetWidth(borderView.bounds)/2 * 0.9,
+                                     0,
+                                     CGRectGetWidth(borderView.bounds)/2 * 0.95,
+                                     CGRectGetHeight(borderView.bounds));
     _initialLabel.text = @"试听";
+    _initialLabel.numberOfLines = 1;
+    _initialLabel.adjustsFontSizeToFitWidth = YES;
     _initialLabel.backgroundColor = [UIColor clearColor];
     _initialLabel.textColor = _tintColor;
     _initialLabel.textAlignment = NSTextAlignmentCenter;
+    _initialLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
     _initialLabel.font = [UIFont systemFontOfSize:14.0];
     _initialLabel.userInteractionEnabled = NO;
     [borderView addSubview:_initialLabel];
@@ -112,11 +116,15 @@
     
     _playingLabel = [[UILabel alloc] init];
     _playingLabel.center = center;
-    _playingLabel.bounds = CGRectOffset(CGRectInset(innerRect, 5, 5), 0, 0);
+    CGFloat labelWidth = innerRect.size.width/2 * cosf(M_PI * 45 / 180) * 2; // circle innerSquare size
+    _playingLabel.bounds = CGRectMake(0, 0, labelWidth, labelWidth);
     _playingLabel.backgroundColor = [UIColor clearColor];
     _playingLabel.font = [UIFont fontWithName:@"Hiragino Kaku Gothic ProN" size:13.0] ;
     _playingLabel.textColor = _tintColor;
     _playingLabel.textAlignment = NSTextAlignmentCenter;
+    _playingLabel.adjustsFontSizeToFitWidth = YES;
+    _playingLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
+    _playingLabel.numberOfLines = 1;
     _playingLabel.text = @"04:35";
     _playingLabel.alpha = 0.0;
     [mainLayer addSublayer:_playingLabel.layer];
