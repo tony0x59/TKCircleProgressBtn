@@ -55,8 +55,6 @@
         [self initArrowLayer];
         
         self.btnState = TKCircleProgressBtnStateInitial;
-        
-        [self addTarget:self action:@selector(buttonPressed:) forControlEvents:UIControlEventTouchUpInside];
     }
     return self;
 }
@@ -170,7 +168,7 @@
     CGPoint center = CGPointMake(frame.size.width/2, frame.size.height/2);
     
     UIBezierPath *path = [UIBezierPath bezierPath];
-
+    
     /* top arrow */
     CGPoint tCenter = CGPointMake(center.x, margin);
     [path moveToPoint:CGPointMake(tCenter.x - len, tCenter.y - len)];
@@ -283,10 +281,13 @@
 - (void)showBufferingStyle:(BOOL)isTrue
 {
     if (isTrue == NO) {
-        circleLayer.path = circlePath.CGPath;
-        [circleLayer removeAnimationForKey:@"bufferingAnimation"];
+        if (circleLayer.path == bufferingPath.CGPath) {
+            [circleLayer removeAnimationForKey:@"bufferingAnimation"];
+            circleLayer.path = circlePath.CGPath;
+        }
         return;
     }
+    
     [UIView animateWithDuration:0.5 animations:^{
         _playingLabel.alpha = 1.0;
     }];
@@ -330,7 +331,7 @@
         CGFloat centerX = margin/2 + CGRectGetWidth(mainLayer.bounds) * radio / 2;
         CGFloat centerY = CGRectGetMidY(self.bounds);
         mainLayer.position = CGPointMake(centerX + _initialBtnOffset.x,
-                                           centerY + _initialBtnOffset.y);
+                                         centerY + _initialBtnOffset.y);
         circleLayer.lineWidth = 1.5;
         circleLayer.strokeColor = _tintColor.CGColor;
         [CATransaction commit];
@@ -343,7 +344,7 @@
         [CATransaction setAnimationDuration:0.4];
         mainLayer.transform = CATransform3DMakeScale(1.0, 1.0, 1.0);
         mainLayer.position = CGPointMake(CGRectGetMidX(self.bounds),
-                                           CGRectGetMidY(self.bounds));
+                                         CGRectGetMidY(self.bounds));
         circleLayer.lineWidth = 1.0;
         circleLayer.strokeColor = [_tintColor colorWithAlphaComponent:0.5].CGColor;
         [CATransaction commit];
@@ -437,7 +438,7 @@
     CGFloat duration = 0.6;
     
     view.transform = CGAffineTransformMakeScale(1, 1);
-
+    
     CAKeyframeAnimation *anim = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
     anim.values = @[ [NSValue valueWithCATransform3D:CATransform3DScale(layer.transform, 1.0, 1.0, 1.0)],
                      [NSValue valueWithCATransform3D:CATransform3DScale(layer.transform, 1.2, 1.2, 1.0)],
@@ -448,7 +449,6 @@
                                 [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut],
                                 [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut] ]];
     anim.fillMode = kCAFillModeForwards;
-//    anim.removedOnCompletion = YES;
     anim.duration = duration;
     [view.layer addAnimation:anim forKey:@"popAnimation"];
 }
@@ -501,7 +501,7 @@
             [progressLayer addAnimation:progressRotate forKey:@"progressRotate"];
             
         } else {
-
+            
             [UIView animateWithDuration:0.25 animations:^{
                 self.alpha = 0.0;
             } completion:^(BOOL finished) {
