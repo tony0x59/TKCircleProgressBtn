@@ -24,6 +24,7 @@
     
     self.progressBtn = [[TKCircleProgressBtn alloc] initWithFrame:CGRectMake(100, 100, 60, 60)];
     _progressBtn.initialBtnOffset = CGPointMake(0, -18);
+    [_progressBtn addTarget:self action:@selector(circleButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_progressBtn];
     
     UISlider *slider = [[UISlider alloc] initWithFrame:CGRectMake(10, 300, 300, 30)];
@@ -64,6 +65,28 @@
     [button4 setTitle:@"button4" forState:UIControlStateNormal];
     [button4 addTarget:self action:@selector(button4Pressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button4];
+}
+
+- (void)circleButtonPressed:(TKCircleProgressBtn*)sender
+{
+    switch (sender.btnState) {
+        case TKCircleProgressBtnStateInitial:
+            sender.btnState = TKCircleProgressBtnStateBuffering;
+            sender.playingLabel.text = @"6.4%";
+            break;
+        case TKCircleProgressBtnStateBuffering:
+            sender.btnState = TKCircleProgressBtnStatePlaying;
+            sender.playingLabel.text = @"-3:12'";
+            break;
+        case TKCircleProgressBtnStatePlaying:
+            sender.btnState = TKCircleProgressBtnStatePause;
+            break;
+        case TKCircleProgressBtnStatePause:
+            sender.btnState = TKCircleProgressBtnStateInitial;
+            break;
+        default:
+            break;
+    }
 }
 
 - (void)sliderChanged:(UISlider*)sender

@@ -67,7 +67,8 @@
     
     borderView = [[UIView alloc] init];
     borderView.center = CGPointMake(frame.size.width/2, frame.size.height/2);
-    borderView.bounds = CGRectMake(0, 0, CGRectGetWidth(self.bounds)*1.15, CGRectGetHeight(self.bounds)*0.44);
+    borderView.bounds = CGRectMake(0, 0, CGRectGetWidth(self.bounds)*1.15,
+                                   CGRectGetHeight(self.bounds)*0.44);
     borderView.layer.borderColor = _tintColor.CGColor;
     borderView.layer.cornerRadius = 5.0;
     borderView.layer.borderWidth = 1.0;
@@ -248,6 +249,11 @@
     }
 }
 
+- (void)reset
+{
+    self.btnState = TKCircleProgressBtnStateInitial;
+}
+
 - (void)showPlayingStyle
 {
     [UIView animateWithDuration:0.5 animations:^{
@@ -351,6 +357,8 @@
     }
 }
 
+#pragma mark - Progress
+
 - (void)setProgress:(CGFloat)progress
 {
     progress = MIN(MAX(progress, 0.0), 1.0);
@@ -359,12 +367,8 @@
         _progress = progress;
         
         [CATransaction begin];
-        [CATransaction setValue:(id)kCFBooleanTrue forKey:kCATransactionDisableActions];
+        [CATransaction setDisableActions:YES];
         progressLayer.strokeEnd = _progress;
-        [CATransaction commit];
-        
-        [CATransaction begin];
-        [CATransaction setValue: (id) kCFBooleanTrue forKey: kCATransactionDisableActions];
         thumbLayer.position = [self thumbPostionWithProgress:_progress];
         [CATransaction commit];
     }
@@ -407,6 +411,7 @@
     return point;
 }
 
+#pragma mark - Pop & Shink (Spring?) animation
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
@@ -423,24 +428,24 @@
 - (void)shrinkAnimation
 {
     CGFloat duration = 0.15;
-    UIView *view = self;
+    CALayer *layer = self.layer;
     
-    view.transform = CGAffineTransformMakeScale(1, 1);
-    [UIView animateWithDuration:duration animations:^{
-        view.transform = CGAffineTransformMakeScale(0.8, 0.8);
-    }];
+    CABasicAnimation *anim = [CABasicAnimation animationWithKeyPath:@"transform"];
+    anim.fromValue = [NSValue valueWithCATransform3D:layer.transform];
+    anim.toValue = [NSValue valueWithCATransform3D:CATransform3DScale(layer.transform, 0.8, 0.8, 1.0)];
+    anim.duration = duration;
+    anim.fillMode = kCAFillModeForwards;
+    anim.removedOnCompletion = NO;
+    [layer addAnimation:anim forKey:@"shrinkAnimation"];
 }
 
 - (void)popAnimation
 {
-    UIView *view = self;
-    CALayer *layer = view.layer;
+    CALayer *layer = self.layer;
     CGFloat duration = 0.6;
     
-    view.transform = CGAffineTransformMakeScale(1, 1);
-    
     CAKeyframeAnimation *anim = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
-    anim.values = @[ [NSValue valueWithCATransform3D:CATransform3DScale(layer.transform, 1.0, 1.0, 1.0)],
+    anim.values = @[ [NSValue valueWithCATransform3D:layer.transform],
                      [NSValue valueWithCATransform3D:CATransform3DScale(layer.transform, 1.2, 1.2, 1.0)],
                      [NSValue valueWithCATransform3D:CATransform3DScale(layer.transform, 0.9, 0.9, 1.0)],
                      [NSValue valueWithCATransform3D:CATransform3DScale(layer.transform, 1.0, 1.0, 1.0)] ];
@@ -448,32 +453,13 @@
     [anim setTimingFunctions:@[ [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut],
                                 [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut],
                                 [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut] ]];
-    anim.fillMode = kCAFillModeForwards;
     anim.duration = duration;
-    [view.layer addAnimation:anim forKey:@"popAnimation"];
+    anim.fillMode = kCAFillModeForwards;
+    anim.removedOnCompletion = NO;
+    [layer addAnimation:anim forKey:@"popAnimation"];
 }
 
-- (void)buttonPressed:(TKCircleProgressBtn*)sender
-{
-    switch (self.btnState) {
-        case TKCircleProgressBtnStateInitial:
-            self.btnState = TKCircleProgressBtnStatePlaying;
-            break;
-        case TKCircleProgressBtnStatePlaying:
-            self.btnState = TKCircleProgressBtnStatePause;
-            break;
-        case TKCircleProgressBtnStatePause:
-            self.btnState = TKCircleProgressBtnStatePlaying;
-            break;
-        default:
-            break;
-    }
-}
-
-- (void)reset
-{
-    self.btnState = TKCircleProgressBtnStateInitial;
-}
+#pragma mark -
 
 - (void)setRotate:(BOOL)rotate
 {
