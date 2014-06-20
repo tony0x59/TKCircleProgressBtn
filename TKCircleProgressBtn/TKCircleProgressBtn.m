@@ -122,10 +122,11 @@
     _playingLabel.font = [UIFont fontWithName:@"Hiragino Kaku Gothic ProN" size:13.0] ;
     _playingLabel.textColor = _tintColor;
     _playingLabel.textAlignment = NSTextAlignmentCenter;
+    _playingLabel.lineBreakMode = NSLineBreakByClipping;
     _playingLabel.adjustsFontSizeToFitWidth = YES;
     _playingLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
     _playingLabel.numberOfLines = 1;
-    _playingLabel.text = @"04:35";
+    _playingLabel.text = @"-4:35'";
     _playingLabel.alpha = 0.0;
     [mainLayer addSublayer:_playingLabel.layer];
     
