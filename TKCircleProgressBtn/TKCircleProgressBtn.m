@@ -133,7 +133,7 @@
     _playingLabel.center = center;
     CGFloat labelWidth = innerRect.size.width/2 * cosf(M_PI * 45 / 180) * 2; // circle innerSquare size
     _playingLabel.bounds = CGRectMake(0, 0, labelWidth, labelWidth);
-    _playingLabel.backgroundColor = [UIColor lightGrayColor];
+    _playingLabel.backgroundColor = [UIColor clearColor];
     /* Fix vertical center to label not working (< iOS 7.0) issue */
     if ( SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ) {
         _playingLabel.font = [UIFont fontWithName:@"Hiragino Kaku Gothic ProN" size:13.0];
