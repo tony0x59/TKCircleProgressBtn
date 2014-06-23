@@ -59,6 +59,9 @@
     self = [super initWithFrame:frame];
     if (self) {
         _tintColor = [UIColor magentaColor];
+        _isAnimatedProgress = YES;
+        _perAnimProgressDuration = 1.0;
+        _perAnimProgressValueChangeThreshold = 0.05;
         
         [self initSquareButtonLayer];
         
@@ -388,13 +391,20 @@
     progress = MIN(MAX(progress, 0.0), 1.0);
     
     if (_progress != progress) {
-        _progress = progress;
         
-        [CATransaction begin];
-        [CATransaction setDisableActions:YES];
-        progressLayer.strokeEnd = _progress;
-        thumbLayer.position = [self thumbPostionWithProgress:_progress];
-        [CATransaction commit];
+        if (self.isAnimatedProgress && ABS(progress - _progress) > \
+            self.perAnimProgressValueChangeThreshold) {
+            
+            [self setProgress:progress withAnimateDuration:self.perAnimProgressDuration];
+        } else {
+            [CATransaction begin];
+            [CATransaction setDisableActions:YES];
+            progressLayer.strokeEnd = _progress;
+            thumbLayer.position = [self thumbPostionWithProgress:_progress];
+            [CATransaction commit];
+            
+            _progress = progress;
+        }
     }
 }
 

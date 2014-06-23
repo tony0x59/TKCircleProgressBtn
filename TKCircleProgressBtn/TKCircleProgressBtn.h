@@ -19,6 +19,9 @@ typedef NS_ENUM(NSUInteger, TKCircleProgressBtnState) {
 @interface TKCircleProgressBtn : UIControl
 
 @property (nonatomic, assign) CGFloat progress;
+@property (nonatomic, assign) BOOL    isAnimatedProgress;   // default YES
+@property (nonatomic, assign) CGFloat perAnimProgressDuration; // default 1.0 sec
+@property (nonatomic, assign) CGFloat perAnimProgressValueChangeThreshold;  // default 0.05 sec
 - (void)setProgress:(CGFloat)progress withAnimateDuration:(NSTimeInterval)duration;
 
 @property (nonatomic, assign) TKCircleProgressBtnState btnState;
@@ -27,7 +30,7 @@ typedef NS_ENUM(NSUInteger, TKCircleProgressBtnState) {
 @property (nonatomic, readonly) UILabel *initialLabel;
 @property (nonatomic, readonly) UILabel *playingLabel;
 
-@property (nonatomic, strong) UIColor *tintColor;
+@property (nonatomic, strong) UIColor *tintColor;   // default magentaColor
 
 @property (nonatomic, assign) CGPoint initialBtnOffset;
 
