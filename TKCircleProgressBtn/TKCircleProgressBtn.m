@@ -137,6 +137,8 @@
     /* Fix vertical center to label not working (< iOS 7.0) issue */
     if ( SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ) {
         _playingLabel.font = [UIFont fontWithName:@"Hiragino Kaku Gothic ProN" size:13.0];
+    } else {
+        _playingLabel.font = [UIFont systemFontOfSize:13.0];
     }
     _playingLabel.textColor = _tintColor;
     _playingLabel.textAlignment = NSTextAlignmentCenter;
