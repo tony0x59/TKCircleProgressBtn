@@ -281,6 +281,7 @@
 - (void)reset
 {
     self.btnState = TKCircleProgressBtnStateInitial;
+    self.progress = 0.0;
 }
 
 - (void)showPlayingStyle
@@ -394,7 +395,7 @@
     
     if (_progress != progress) {
         
-        if (self.isAnimatedProgress && ABS(progress - _progress) > \
+        if (self.isAnimatedProgress && (progress - _progress) > \
             self.perAnimProgressValueChangeThreshold) {
             
             [self setProgress:progress withAnimateDuration:self.perAnimProgressDuration];
