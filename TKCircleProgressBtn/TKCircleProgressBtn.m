@@ -61,7 +61,7 @@
         _tintColor = [UIColor magentaColor];
         _isAnimatedProgress = YES;
         _perAnimProgressDuration = 1.0;
-        _perAnimProgressValueChangeThreshold = 0.05;
+        _perAnimProgressValueChangeThreshold = 0.01;
         
         [self initSquareButtonLayer];
         
