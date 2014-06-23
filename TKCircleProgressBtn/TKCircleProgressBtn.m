@@ -10,6 +10,18 @@
 #import <QuartzCore/QuartzCore.h>
 
 
+/*
+ *  System Versioning Preprocessor Macros
+ */
+
+#define SYSTEM_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
+#define SYSTEM_VERSION_GREATER_THAN(v)              ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending)
+#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
+#define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
+#define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
+
+
+
 #define DEGREES_TO_RADIANS(degrees)  ((M_PI * ((degrees) - 90))/ 180)
 
 
@@ -118,14 +130,17 @@
     _playingLabel.center = center;
     CGFloat labelWidth = innerRect.size.width/2 * cosf(M_PI * 45 / 180) * 2; // circle innerSquare size
     _playingLabel.bounds = CGRectMake(0, 0, labelWidth, labelWidth);
-    _playingLabel.backgroundColor = [UIColor clearColor];
-    _playingLabel.font = [UIFont fontWithName:@"Hiragino Kaku Gothic ProN" size:13.0] ;
+    _playingLabel.backgroundColor = [UIColor lightGrayColor];
+    /* Fix vertical center to label not working (< iOS 7.0) issue */
+    if ( SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"7.0") ) {
+        _playingLabel.font = [UIFont fontWithName:@"Hiragino Kaku Gothic ProN" size:13.0];
+    }
     _playingLabel.textColor = _tintColor;
     _playingLabel.textAlignment = NSTextAlignmentCenter;
     _playingLabel.lineBreakMode = NSLineBreakByClipping;
+    _playingLabel.numberOfLines = 1;
     _playingLabel.adjustsFontSizeToFitWidth = YES;
     _playingLabel.baselineAdjustment = UIBaselineAdjustmentAlignCenters;
-    _playingLabel.numberOfLines = 1;
     _playingLabel.text = @"-4:35'";
     _playingLabel.alpha = 0.0;
     [mainLayer addSublayer:_playingLabel.layer];

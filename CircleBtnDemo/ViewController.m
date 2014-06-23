@@ -22,7 +22,7 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-    self.progressBtn = [[TKCircleProgressBtn alloc] initWithFrame:CGRectMake(100, 100, 60, 60)];
+    self.progressBtn = [[TKCircleProgressBtn alloc] initWithFrame:CGRectMake(100, 100, 55, 55)];
     _progressBtn.initialBtnOffset = CGPointMake(0, -18);
     [_progressBtn addTarget:self action:@selector(circleButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_progressBtn];
@@ -42,25 +42,25 @@
     [self.view addSubview:swich2];
     
     
-    UIButton *button1 = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIButton *button1 = [UIButton buttonWithType:UIButtonTypeCustom];
     button1.frame = CGRectMake(20, 400, 100, 44);
     [button1 setTitle:@"button1" forState:UIControlStateNormal];
     [button1 addTarget:self action:@selector(button1Pressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button1];
     
-    UIButton *button2 = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIButton *button2 = [UIButton buttonWithType:UIButtonTypeCustom];
     button2.frame = CGRectMake(20 + 110, 400, 100, 44);
     [button2 setTitle:@"button2" forState:UIControlStateNormal];
     [button2 addTarget:self action:@selector(button2Pressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button2];
     
-    UIButton *button3 = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIButton *button3 = [UIButton buttonWithType:UIButtonTypeCustom];
     button3.frame = CGRectMake(20 + 110*2, 400, 100, 44);
     [button3 setTitle:@"button3" forState:UIControlStateNormal];
     [button3 addTarget:self action:@selector(button3Pressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button3];
     
-    UIButton *button4 = [UIButton buttonWithType:UIButtonTypeSystem];
+    UIButton *button4 = [UIButton buttonWithType:UIButtonTypeCustom];
     button4.frame = CGRectMake(20, 450, 100, 44);
     [button4 setTitle:@"button4" forState:UIControlStateNormal];
     [button4 addTarget:self action:@selector(button4Pressed:) forControlEvents:UIControlEventTouchUpInside];
